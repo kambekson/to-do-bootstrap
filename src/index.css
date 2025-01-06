@@ -7,11 +7,7 @@ html, body, #root {
   min-height: 100%;
 }
 
-/* Responsive tweaks to avoid overflow and reduce mobile padding */
+/* Desktop-first tweaks */
 .sidebar img { max-width: 140px; height: auto; }
 header .form-control { min-width: 0; }
 
-@media (max-width: 992px) {
-  :root { --sidebar-width: 100%; }
-  .p-4 { padding: 1rem !important; }
-}

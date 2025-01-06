@@ -4,14 +4,6 @@
     box-sizing: border-box;
 }
 
-@media (max-width: 992px) {
-    .sidebar {
-        width: 100%;
-        flex: 0 0 auto;
-        padding: 1.5rem;
-    }
-}
-
 .is-active::before{
     content: url("../assets/active-before.svg");
     margin-right: 10px;

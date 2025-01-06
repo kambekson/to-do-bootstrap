@@ -8,8 +8,8 @@ function Header() {
         <header className="p-2 shadow-sm">
             <nav className="navbar px-4">
                 <div className="container-fluid">
-                    <form className="d-flex w-100 w-lg-75" role="search">
-                        <input className="form-control me-2 flex-grow-1" type="search" placeholder="Search" aria-label="Search"/>
+                    <form className="d-flex w-75" role="search">
+                        <input className="form-control me-2" type="search" placeholder="Search" aria-label="Search"/>
                         <button className="btn btn-outline-dark" type="submit">Search</button>
                     </form>
                     <div className="d-flex">

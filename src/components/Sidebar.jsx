@@ -47,18 +47,6 @@ function Sidebar({ isOpen, setIsOpen }) {
                         </NavLink>
                     ))}
                 </nav>
-
-                <div className="mt-auto w-100 pt-4 border-top border-secondary border-opacity-25 d-none d-lg-block">
-                    <div className="d-flex align-items-center gap-3">
-                        <div className="bg-primary text-white rounded-circle d-flex align-items-center justify-content-center" style={{ width: '40px', height: '40px', fontWeight: 'bold' }}>
-                            AI
-                        </div>
-                        <div>
-                            <div className="fw-semibold text-main fs-7">Antigravity</div>
-                            <div className="text-muted fs-8">Pro Assistant</div>
-                        </div>
-                    </div>
-                </div>
             </aside>
         </>
     );

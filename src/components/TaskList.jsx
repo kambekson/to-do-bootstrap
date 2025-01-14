@@ -36,22 +36,29 @@ function TaskList({ tasks, updateTaskStatus, statusTitle, statusTheme, statusVal
         }
     };
 
+    const bulletColor = {
+        warning: 'var(--warning-color)',
+        success: 'var(--success-color)',
+        info: 'var(--frozen-color)'
+    }[statusTheme] || 'var(--primary-color)';
+
     return (
         <div 
-            className="p-3 rounded-4" 
+            className="p-3" 
             onDragOver={handleDragOver}
             onDragLeave={handleDragLeave}
             onDrop={handleDrop}
             style={{ 
-                backgroundColor: isDragOver ? 'rgba(79, 70, 229, 0.08)' : 'rgba(79, 70, 229, 0.03)', 
-                border: isDragOver ? '2px dashed var(--primary-color)' : '1px solid var(--border-color)',
-                minHeight: '450px',
+                backgroundColor: isDragOver ? 'rgba(79, 70, 229, 0.05)' : 'rgba(79, 70, 229, 0.015)', 
+                border: isDragOver ? '2px dashed var(--primary-color)' : '2px solid var(--border-color)',
+                minHeight: '500px',
+                borderRadius: 'var(--border-radius-md)',
                 transition: 'all var(--transition-fast)'
             }}
         >
             <div className="d-flex align-items-center justify-content-between mb-3 pb-2 border-bottom border-secondary border-opacity-10">
                 <h3 className="fs-6 fw-bold mb-0 text-main d-flex align-items-center gap-2">
-                    <span className={`d-inline-block rounded-circle bg-${statusTheme} p-1.5`} style={{ width: '8px', height: '8px' }}></span>
+                    <span className="d-inline-block rounded-circle" style={{ width: '10px', height: '10px', backgroundColor: bulletColor }}></span>
                     {statusTitle}
                 </h3>
                 <span className="badge bg-secondary bg-opacity-10 text-main rounded-pill font-weight-bold fs-8">
@@ -61,7 +68,7 @@ function TaskList({ tasks, updateTaskStatus, statusTitle, statusTheme, statusVal
 
             <div className="d-flex flex-column gap-3">
                 {tasks.length === 0 ? (
-                    <div className="text-center py-5 text-muted border border-dashed rounded-3 border-secondary border-opacity-25" style={{ borderStyle: 'dashed' }}>
+                    <div className="text-center py-5 text-muted border border-dashed rounded-3 border-secondary border-opacity-25" style={{ borderStyle: 'dashed', backgroundColor: 'rgba(0,0,0,0.01)' }}>
                         <i className="bi bi-inbox fs-2 mb-2 d-block opacity-50"></i>
                         <span className="fs-8">Drop tasks here</span>
                     </div>

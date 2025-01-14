@@ -135,6 +135,7 @@ export default function Tasks() {
                         updateTaskStatus={updateTaskStatus}
                         statusTitle="In Progress"
                         statusTheme="warning"
+                        statusValue="In progress"
                     />
                 </div>
                 
@@ -144,6 +145,7 @@ export default function Tasks() {
                         updateTaskStatus={updateTaskStatus}
                         statusTitle="Closed"
                         statusTheme="success"
+                        statusValue="Closed"
                     />
                 </div>
                 
@@ -153,6 +155,7 @@ export default function Tasks() {
                         updateTaskStatus={updateTaskStatus}
                         statusTitle="Frozen"
                         statusTheme="info"
+                        statusValue="Frozen"
                     />
                 </div>
             </div>

@@ -70,13 +70,27 @@ const statusOptions = ['In progress', 'Closed', 'Frozen'];
 
 export default function Tasks() {
     const [tasks, setTasks] = useState(() => {
-        const savedTasks = localStorage.getItem('tasks');
-        return savedTasks ? JSON.parse(savedTasks) : initialTasks;
+        try {
+            const savedTasks = localStorage.getItem('tasks');
+            if (savedTasks) {
+                const parsed = JSON.parse(savedTasks);
+                if (Array.isArray(parsed)) {
+                    return parsed;
+                }
+            }
+        } catch (e) {
+            console.error("Error reading tasks from localStorage:", e);
+        }
+        return initialTasks;
     });
     const { searchQuery } = useOutletContext() || { searchQuery: '' };
 
     useEffect(() => {
-        localStorage.setItem('tasks', JSON.stringify(tasks));
+        try {
+            localStorage.setItem('tasks', JSON.stringify(tasks));
+        } catch (e) {
+            console.error("Error saving tasks to localStorage:", e);
+        }
     }, [tasks]);
 
     function addTask(newTask) {

@@ -1,5 +1,5 @@
 import TaskForm from '../components/TaskForm';
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import TaskList from "../components/TaskList.jsx";
 import { useOutletContext } from "react-router-dom";
 
@@ -11,7 +11,7 @@ const initialTasks = [
         status: 'In progress',
         author: 'Azhar. I',
         assignee: 'Jane Smith',
-        dateCreated: "2026-06-18 10:30",
+        dateCreated: "06.01.2025 10:30",
     },
     {
         id: 2,
@@ -20,7 +20,7 @@ const initialTasks = [
         status: 'Closed',
         author: 'Jane Smith',
         assignee: 'John Doe',
-        dateCreated: "2026-06-15 14:20",
+        dateCreated: "06.01.2025 14:20",
     },
     {
         id: 3,
@@ -29,7 +29,7 @@ const initialTasks = [
         status: 'Frozen',
         author: 'Azhar. I',
         assignee: 'Jane Smith',
-        dateCreated: "2026-06-17 09:15",
+        dateCreated: "06.01.2025 09:15",
     },
     {
         id: 4,
@@ -38,7 +38,7 @@ const initialTasks = [
         status: 'Closed',
         author: 'Jane Smith',
         assignee: 'John Doe',
-        dateCreated: "2026-06-16 16:45",
+        dateCreated: "06.01.2025 16:45",
     }
 ];
 
@@ -69,8 +69,15 @@ const priorities = ['Low', 'Medium', 'High'];
 const statusOptions = ['In progress', 'Closed', 'Frozen'];
 
 export default function Tasks() {
-    const [tasks, setTasks] = useState(initialTasks);
+    const [tasks, setTasks] = useState(() => {
+        const savedTasks = localStorage.getItem('tasks');
+        return savedTasks ? JSON.parse(savedTasks) : initialTasks;
+    });
     const { searchQuery } = useOutletContext() || { searchQuery: '' };
+
+    useEffect(() => {
+        localStorage.setItem('tasks', JSON.stringify(tasks));
+    }, [tasks]);
 
     function addTask(newTask) {
         setTasks((prevTasks) => [newTask, ...prevTasks]);

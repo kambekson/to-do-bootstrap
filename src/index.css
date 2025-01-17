@@ -150,4 +150,22 @@ header .form-control {
   min-width: 0;
 }
 
+/* Delete Task Button Hover Style */
+.btn-delete-task {
+  color: var(--danger-color);
+  opacity: 0.4;
+  transition: all var(--transition-fast);
+  width: 26px;
+  height: 26px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.btn-delete-task:hover {
+  opacity: 1 !important;
+  color: var(--danger-text) !important;
+  background-color: var(--danger-bg) !important;
+}
+
 

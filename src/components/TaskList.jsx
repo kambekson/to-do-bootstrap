@@ -1,6 +1,6 @@
 import { useState } from 'react';
 
-function TaskList({ tasks, updateTaskStatus, statusTitle, statusTheme, statusValue }) {
+function TaskList({ tasks, updateTaskStatus, statusTitle, statusTheme, statusValue, deleteTask }) {
     const [isDragOver, setIsDragOver] = useState(false);
 
     const handleChangeStatus = (taskId, newStatus) => {
@@ -92,8 +92,16 @@ function TaskList({ tasks, updateTaskStatus, statusTitle, statusTheme, statusVal
                                 <p className="fw-semibold text-main mb-0 fs-7 leading-snug" style={{ minWidth: 0, wordBreak: 'break-word' }}>
                                     {task.description}
                                 </p>
-                                <div className="flex-shrink-0">
+                                <div className="flex-shrink-0 d-flex align-items-center gap-1">
                                     {getPriorityBadge(task.priority)}
+                                    <button 
+                                        type="button" 
+                                        className="btn btn-delete-task p-1 lh-1 border-0 rounded-circle"
+                                        onClick={() => deleteTask(task.id)}
+                                        title="Delete task"
+                                    >
+                                        <i className="bi bi-trash fs-8"></i>
+                                    </button>
                                 </div>
                             </div>
 

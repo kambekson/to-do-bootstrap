@@ -105,6 +105,10 @@ export default function Tasks() {
         );
     };
 
+    const deleteTask = (taskId) => {
+        setTasks((prevTasks) => prevTasks.filter((task) => task.id !== taskId));
+    };
+
     // Filter tasks based on global searchQuery
     const filteredTasks = tasks.filter(task => {
         const query = searchQuery ? searchQuery.toLowerCase().trim() : '';
@@ -154,6 +158,7 @@ export default function Tasks() {
                     <TaskList 
                         tasks={inProgressTasks}
                         updateTaskStatus={updateTaskStatus}
+                        deleteTask={deleteTask}
                         statusTitle="In Progress"
                         statusTheme="warning"
                         statusValue="In progress"
@@ -164,6 +169,7 @@ export default function Tasks() {
                     <TaskList 
                         tasks={closedTasks}
                         updateTaskStatus={updateTaskStatus}
+                        deleteTask={deleteTask}
                         statusTitle="Closed"
                         statusTheme="success"
                         statusValue="Closed"
@@ -174,6 +180,7 @@ export default function Tasks() {
                     <TaskList 
                         tasks={frozenTasks}
                         updateTaskStatus={updateTaskStatus}
+                        deleteTask={deleteTask}
                         statusTitle="Frozen"
                         statusTheme="info"
                         statusValue="Frozen"

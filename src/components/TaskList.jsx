@@ -1,6 +1,6 @@
 import { useState } from 'react';
 
-function TaskList({ tasks, updateTaskStatus, statusTitle, statusTheme, statusValue, deleteTask }) {
+function TaskList({ tasks, updateTaskStatus, statusTitle, statusTheme, statusValue, deleteTask, onSelectTask }) {
     const [isDragOver, setIsDragOver] = useState(false);
 
     const handleChangeStatus = (taskId, newStatus) => {
@@ -73,21 +73,27 @@ function TaskList({ tasks, updateTaskStatus, statusTitle, statusTheme, statusVal
                         <span className="fs-8">Drop tasks here</span>
                     </div>
                 ) : (
-                    tasks.map((task) => (
-                        <div 
-                            key={task.id} 
-                            draggable="true"
-                            onDragStart={(e) => {
-                                e.dataTransfer.setData('taskId', task.id);
-                                e.dataTransfer.effectAllowed = 'move';
-                            }}
-                            className="premium-card p-3 d-flex flex-column gap-3"
-                            style={{ 
-                                backgroundColor: 'var(--bg-card)', 
-                                border: '1px solid var(--border-color)',
-                                cursor: 'grab'
-                            }}
-                        >
+                    tasks.map((task) => {
+                        const totalSubtasks = task.subtasks ? task.subtasks.length : 0;
+                        const completedSubtasks = task.subtasks ? task.subtasks.filter(s => s.completed).length : 0;
+                        const completionPercentage = totalSubtasks > 0 ? Math.round((completedSubtasks / totalSubtasks) * 100) : 0;
+
+                        return (
+                            <div 
+                                key={task.id} 
+                                draggable="true"
+                                onDragStart={(e) => {
+                                    e.dataTransfer.setData('taskId', task.id);
+                                    e.dataTransfer.effectAllowed = 'move';
+                                }}
+                                onClick={() => onSelectTask(task)}
+                                className="premium-card p-3 d-flex flex-column gap-3"
+                                style={{ 
+                                    backgroundColor: 'var(--bg-card)', 
+                                    border: '1px solid var(--border-color)',
+                                    cursor: 'pointer'
+                                }}
+                            >
                             <div className="d-flex align-items-start justify-content-between gap-2">
                                 <p className="fw-semibold text-main mb-0 fs-7 leading-snug" style={{ minWidth: 0, wordBreak: 'break-word' }}>
                                     {task.description}
@@ -97,7 +103,7 @@ function TaskList({ tasks, updateTaskStatus, statusTitle, statusTheme, statusVal
                                     <button 
                                         type="button" 
                                         className="btn btn-delete-task p-1 lh-1 border-0 rounded-circle"
-                                        onClick={() => deleteTask(task.id)}
+                                        onClick={(e) => { e.stopPropagation(); deleteTask(task.id); }}
                                         title="Delete task"
                                     >
                                         <i className="bi bi-trash fs-8"></i>
@@ -114,6 +120,27 @@ function TaskList({ tasks, updateTaskStatus, statusTitle, statusTheme, statusVal
                                     <i className="bi bi-calendar3 text-secondary opacity-75"></i>
                                     <span>{task.dateCreated}</span>
                                 </div>
+                                {totalSubtasks > 0 && (
+                                    <div className="mt-1">
+                                        <div className="d-flex align-items-center justify-content-between text-muted fs-8 mb-1">
+                                            <span className="d-flex align-items-center gap-1">
+                                                <i className="bi bi-check2-square text-primary"></i>
+                                                <span>Subtasks: {completedSubtasks}/{totalSubtasks}</span>
+                                            </span>
+                                            <span className="fw-semibold text-main">{completionPercentage}%</span>
+                                        </div>
+                                        <div className="progress" style={{ height: '4px', backgroundColor: 'rgba(0,0,0,0.05)' }}>
+                                            <div 
+                                                className="progress-bar bg-primary" 
+                                                role="progressbar" 
+                                                style={{ width: `${completionPercentage}%`, transition: 'width 0.3s ease' }} 
+                                                aria-valuenow={completionPercentage} 
+                                                aria-valuemin="0" 
+                                                aria-valuemax="100"
+                                            />
+                                        </div>
+                                    </div>
+                                )}
                             </div>
 
                             <div className="pt-2 border-top border-secondary border-opacity-10">
@@ -123,6 +150,7 @@ function TaskList({ tasks, updateTaskStatus, statusTitle, statusTheme, statusVal
                                         id={`status-${task.id}`}
                                         className="form-select form-select-sm py-1 ps-2 pe-4 fs-8 bg-light text-main"
                                         value={task.status}
+                                        onClick={(e) => e.stopPropagation()}
                                         onChange={(e) => handleChangeStatus(task.id, e.target.value)}
                                         style={{ width: 'auto', border: '1px solid var(--border-color)' }}
                                     >
@@ -133,7 +161,8 @@ function TaskList({ tasks, updateTaskStatus, statusTitle, statusTheme, statusVal
                                 </div>
                             </div>
                         </div>
-                    ))
+                    );
+                })
                 )}
             </div>
         </div>

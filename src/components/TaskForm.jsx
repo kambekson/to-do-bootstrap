@@ -30,6 +30,7 @@ export default function TaskForm({ addTask, users, priorities }) {
                 hour: '2-digit', 
                 minute: '2-digit' 
             }),
+            subtasks: []
         };
         
         addTask(newTask);

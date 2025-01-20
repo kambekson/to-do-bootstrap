@@ -2,6 +2,7 @@ import TaskForm from '../components/TaskForm';
 import { useState, useEffect } from "react";
 import TaskList from "../components/TaskList.jsx";
 import { useOutletContext } from "react-router-dom";
+import TaskModal from "../components/TaskModal.jsx";
 
 const initialTasks = [
     {
@@ -12,6 +13,11 @@ const initialTasks = [
         author: 'Azhar. I',
         assignee: 'Jane Smith',
         dateCreated: "06.01.2025 10:30",
+        subtasks: [
+            { id: 101, text: 'Draw wireframes', completed: true },
+            { id: 102, text: 'Select color palettes', completed: false },
+            { id: 103, text: 'Define type scales', completed: false }
+        ]
     },
     {
         id: 2,
@@ -21,6 +27,10 @@ const initialTasks = [
         author: 'Jane Smith',
         assignee: 'John Doe',
         dateCreated: "06.01.2025 14:20",
+        subtasks: [
+            { id: 201, text: 'Setup vite config', completed: true },
+            { id: 202, text: 'Install dev dependencies', completed: true }
+        ]
     },
     {
         id: 3,
@@ -30,6 +40,9 @@ const initialTasks = [
         author: 'Azhar. I',
         assignee: 'Jane Smith',
         dateCreated: "06.01.2025 09:15",
+        subtasks: [
+            { id: 301, text: 'Verify sidebar collapses on mobile', completed: false }
+        ]
     },
     {
         id: 4,
@@ -39,6 +52,7 @@ const initialTasks = [
         author: 'Jane Smith',
         assignee: 'John Doe',
         dateCreated: "06.01.2025 16:45",
+        subtasks: []
     }
 ];
 
@@ -84,6 +98,7 @@ export default function Tasks() {
         return initialTasks;
     });
     const { searchQuery } = useOutletContext() || { searchQuery: '' };
+    const [activeEditingTask, setActiveEditingTask] = useState(null);
 
     useEffect(() => {
         try {
@@ -107,6 +122,13 @@ export default function Tasks() {
 
     const deleteTask = (taskId) => {
         setTasks((prevTasks) => prevTasks.filter((task) => task.id !== taskId));
+    };
+
+    const saveTaskDetails = (updatedTask) => {
+        setTasks((prevTasks) =>
+            prevTasks.map((t) => (t.id === updatedTask.id ? updatedTask : t))
+        );
+        setActiveEditingTask(null);
     };
 
     // Filter tasks based on global searchQuery
@@ -159,6 +181,7 @@ export default function Tasks() {
                         tasks={inProgressTasks}
                         updateTaskStatus={updateTaskStatus}
                         deleteTask={deleteTask}
+                        onSelectTask={(task) => setActiveEditingTask(task)}
                         statusTitle="In Progress"
                         statusTheme="warning"
                         statusValue="In progress"
@@ -170,6 +193,7 @@ export default function Tasks() {
                         tasks={closedTasks}
                         updateTaskStatus={updateTaskStatus}
                         deleteTask={deleteTask}
+                        onSelectTask={(task) => setActiveEditingTask(task)}
                         statusTitle="Closed"
                         statusTheme="success"
                         statusValue="Closed"
@@ -181,12 +205,23 @@ export default function Tasks() {
                         tasks={frozenTasks}
                         updateTaskStatus={updateTaskStatus}
                         deleteTask={deleteTask}
+                        onSelectTask={(task) => setActiveEditingTask(task)}
                         statusTitle="Frozen"
                         statusTheme="info"
                         statusValue="Frozen"
                     />
                 </div>
             </div>
+
+            {activeEditingTask && (
+                <TaskModal 
+                    task={activeEditingTask}
+                    onClose={() => setActiveEditingTask(null)}
+                    onSave={saveTaskDetails}
+                    users={users}
+                    priorities={priorities}
+                />
+            )}
         </div>
     );
 }

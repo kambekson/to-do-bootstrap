@@ -1,11 +1,12 @@
 import { useState } from 'react';
 
-export default function TaskModal({ task, onClose, onSave, users, priorities }) {
+export default function TaskModal({ task, onClose, onSave, users, priorities, clients = [] }) {
     const [description, setDescription] = useState(task.description);
     const [priority, setPriority] = useState(task.priority);
     // Parse the assignee name back to a clean name (e.g. "Jane Smith (Designer)" -> "Jane Smith")
     const cleanAssignee = task.assignee.split(' (')[0];
     const [assignee, setAssignee] = useState(cleanAssignee);
+    const [clientName, setClientName] = useState(task.clientName || 'Acme Corporation');
     const [subtasks, setSubtasks] = useState(task.subtasks || []);
     const [newSubtaskText, setNewSubtaskText] = useState('');
 
@@ -40,6 +41,7 @@ export default function TaskModal({ task, onClose, onSave, users, priorities }) 
             description,
             priority,
             assignee: assignee + roleStr,
+            clientName,
             subtasks
         };
         onSave(updatedTask);
@@ -88,7 +90,7 @@ export default function TaskModal({ task, onClose, onSave, users, priorities }) 
 
                     <div className="row g-3">
                         {/* Priority */}
-                        <div className="col-12 col-sm-6">
+                        <div className="col-12 col-sm-4">
                             <label htmlFor="modal-priority" className="form-label d-flex align-items-center gap-2 mb-2">
                                 <i className="bi bi-flag-fill text-danger"></i>
                                 <span>Priority</span>
@@ -106,7 +108,7 @@ export default function TaskModal({ task, onClose, onSave, users, priorities }) 
                         </div>
 
                         {/* Assignee */}
-                        <div className="col-12 col-sm-6">
+                        <div className="col-12 col-sm-4">
                             <label htmlFor="modal-assignee" className="form-label d-flex align-items-center gap-2 mb-2">
                                 <i className="bi bi-person-fill text-success"></i>
                                 <span>Assignee</span>
@@ -119,6 +121,24 @@ export default function TaskModal({ task, onClose, onSave, users, priorities }) 
                             >
                                 {users.map(user => (
                                     <option key={user.id} value={user.name}>{user.name}</option>
+                                ))}
+                            </select>
+                        </div>
+
+                        {/* Client */}
+                        <div className="col-12 col-sm-4">
+                            <label htmlFor="modal-client" className="form-label d-flex align-items-center gap-2 mb-2">
+                                <i className="bi bi-briefcase-fill text-primary"></i>
+                                <span>Client</span>
+                            </label>
+                            <select
+                                id="modal-client"
+                                className="form-select"
+                                value={clientName}
+                                onChange={(e) => setClientName(e.target.value)}
+                            >
+                                {clients.map(c => (
+                                    <option key={c.id} value={c.name}>{c.name}</option>
                                 ))}
                             </select>
                         </div>

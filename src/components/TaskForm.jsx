@@ -1,10 +1,11 @@
 import { useState } from "react";
 import Button from "./Button.jsx";
 
-export default function TaskForm({ addTask, users, priorities }) {
+export default function TaskForm({ addTask, users, priorities, clients = [] }) {
     const [description, setDescription] = useState('');
     const [priority, setPriority] = useState('Low');
     const [assignee, setAssignee] = useState('Unassigned');
+    const [clientName, setClientName] = useState(clients[0]?.name || 'Acme Corporation');
 
     function handleSubmit(e) {
         e.preventDefault();
@@ -23,6 +24,7 @@ export default function TaskForm({ addTask, users, priorities }) {
             priority,
             status: 'In progress',
             assignee: assignee + roleStr,
+            clientName,
             dateCreated: new Date().toLocaleString('en-US', { 
                 year: 'numeric', 
                 month: '2-digit', 
@@ -37,6 +39,9 @@ export default function TaskForm({ addTask, users, priorities }) {
         setDescription('');
         setPriority('Low');
         setAssignee('Unassigned');
+        if (clients.length > 0) {
+            setClientName(clients[0].name);
+        }
     }
 
     return (
@@ -96,6 +101,25 @@ export default function TaskForm({ addTask, users, priorities }) {
                     {users.map((user) => (
                         <option key={user.id} value={user.name}>
                             {user.name} - {user.role}
+                        </option>
+                    ))}
+                </select>
+            </div>
+
+            <div>
+                <label htmlFor="clientName" className="form-label d-flex align-items-center gap-2 mb-2">
+                    <i className="bi bi-briefcase-fill text-primary"></i>
+                    <span>Client</span>
+                </label>
+                <select
+                    className="form-select"
+                    id="clientName"
+                    value={clientName}
+                    onChange={(e) => setClientName(e.target.value)}
+                >
+                    {clients.map((c) => (
+                        <option key={c.id} value={c.name}>
+                            {c.name}
                         </option>
                     ))}
                 </select>

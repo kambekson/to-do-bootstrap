@@ -1,60 +1,8 @@
 import TaskForm from '../components/TaskForm';
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import TaskList from "../components/TaskList.jsx";
 import { useOutletContext } from "react-router-dom";
 import TaskModal from "../components/TaskModal.jsx";
-
-const initialTasks = [
-    {
-        id: 1,
-        description: 'Design UI mockup and style guide',
-        priority: 'High',
-        status: 'In progress',
-        author: 'Azhar. I',
-        assignee: 'Jane Smith',
-        dateCreated: "06.01.2025 10:30",
-        subtasks: [
-            { id: 101, text: 'Draw wireframes', completed: true },
-            { id: 102, text: 'Select color palettes', completed: false },
-            { id: 103, text: 'Define type scales', completed: false }
-        ]
-    },
-    {
-        id: 2,
-        description: 'Configure Vite bundler and ESLint rules',
-        priority: 'Low',
-        status: 'Closed',
-        author: 'Jane Smith',
-        assignee: 'John Doe',
-        dateCreated: "06.01.2025 14:20",
-        subtasks: [
-            { id: 201, text: 'Setup vite config', completed: true },
-            { id: 202, text: 'Install dev dependencies', completed: true }
-        ]
-    },
-    {
-        id: 3,
-        description: 'Implement responsive routing layouts',
-        priority: 'Medium',
-        status: 'Frozen',
-        author: 'Azhar. I',
-        assignee: 'Jane Smith',
-        dateCreated: "06.01.2025 09:15",
-        subtasks: [
-            { id: 301, text: 'Verify sidebar collapses on mobile', completed: false }
-        ]
-    },
-    {
-        id: 4,
-        description: 'Verify application performance benchmarks',
-        priority: "Low",
-        status: 'Closed',
-        author: 'Jane Smith',
-        assignee: 'John Doe',
-        dateCreated: "06.01.2025 16:45",
-        subtasks: []
-    }
-];
 
 const users = [
     {
@@ -83,30 +31,13 @@ const priorities = ['Low', 'Medium', 'High'];
 const statusOptions = ['In progress', 'Closed', 'Frozen'];
 
 export default function Tasks() {
-    const [tasks, setTasks] = useState(() => {
-        try {
-            const savedTasks = localStorage.getItem('tasks');
-            if (savedTasks) {
-                const parsed = JSON.parse(savedTasks);
-                if (Array.isArray(parsed)) {
-                    return parsed;
-                }
-            }
-        } catch (e) {
-            console.error("Error reading tasks from localStorage:", e);
-        }
-        return initialTasks;
-    });
-    const { searchQuery } = useOutletContext() || { searchQuery: '' };
+    const { searchQuery, tasks, setTasks, clients } = useOutletContext() || { 
+        searchQuery: '', 
+        tasks: [], 
+        setTasks: () => {}, 
+        clients: [] 
+    };
     const [activeEditingTask, setActiveEditingTask] = useState(null);
-
-    useEffect(() => {
-        try {
-            localStorage.setItem('tasks', JSON.stringify(tasks));
-        } catch (e) {
-            console.error("Error saving tasks to localStorage:", e);
-        }
-    }, [tasks]);
 
     function addTask(newTask) {
         setTasks((prevTasks) => [newTask, ...prevTasks]);
@@ -139,7 +70,8 @@ export default function Tasks() {
             task.description.toLowerCase().includes(query) ||
             task.assignee.toLowerCase().includes(query) ||
             task.priority.toLowerCase().includes(query) ||
-            task.status.toLowerCase().includes(query)
+            task.status.toLowerCase().includes(query) ||
+            (task.clientName && task.clientName.toLowerCase().includes(query))
         );
     });
 
@@ -172,7 +104,12 @@ export default function Tasks() {
                 <div className="col-12 col-xl-3">
                     <div className="sticky-xl-top" style={{ top: '24px', zIndex: 1 }}>
                         <h2 className="fs-5 text-main mb-3">Create New Task</h2>
-                        <TaskForm addTask={addTask} users={users} priorities={priorities} />
+                        <TaskForm 
+                            addTask={addTask} 
+                            users={users} 
+                            priorities={priorities} 
+                            clients={clients} 
+                        />
                     </div>
                 </div>
                 
@@ -220,6 +157,7 @@ export default function Tasks() {
                     onSave={saveTaskDetails}
                     users={users}
                     priorities={priorities}
+                    clients={clients}
                 />
             )}
         </div>

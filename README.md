@@ -1,56 +1,136 @@
 # To-Do Bootstrap App
 
-A small React + Vite dashboard for managing tasks with a Bootstrap-based interface. The project includes a sidebar navigation, a task board, and sample pages for clients, inbox, and contacts.
+Полнофункциональное приложение для управления задачами и проектами. Приложение представляет собой современный интерфейс с адаптивным дизайном, боковой панелью навигации, управлением задачами, и страницами для работы с клиентами, контактами и входящей почтой.
 
-## Features
+## Возможности
 
-- Responsive layout built with Bootstrap and Bootstrap Icons
-- Sidebar navigation between main sections
-- Task management page with:
-  - creating new tasks
-  - viewing tasks by status
-  - updating task status in the board
-- Simple routing with React Router
+✨ **Основной функционал:**
+- Адаптивный интерфейс на базе Bootstrap 5 с иконками Bootstrap Icons
+- Боковая панель (Sidebar) для быстрой навигации между разделами
+- Система управления задачами с разными статусами (In progress, Closed, Frozen)
+- Создание и редактирование новых задач через модальные окна
+- Просмотр задач в виде доски (Kanban-style)
+- Система приоритизации (High, Medium, Low)
+- Подзадачи с отслеживанием завершения
+- Привязка задач к клиентам
 
-## Tech Stack
+## Стек технологий
 
-- React 18
-- Vite
-- React Router DOM
-- Bootstrap 5
-- Bootstrap Icons
+| Инструмент | Версия | Назначение |
+|-----------|--------|-----------|
+| React | 18.3.1 | UI фреймворк |
+| React Router DOM | 7.0.1 | Клиентская маршрутизация |
+| Vite | 5.4.10 | Сборщик и dev сервер |
+| Bootstrap | 5.3.3 | CSS фреймворк и компоненты |
+| Bootstrap Icons | 1.11.3 | Иконки |
+| ESLint | 9.13.0 | Проверка кода |
 
-## Getting Started
+## Начало работы
 
-1. Install dependencies:
+### Требования
+- Node.js 16+
+- npm или yarn
+
+### Установка
+
+1. **Клонируйте репозиторий и установите зависимости:**
+   ```bash
    npm install
+   ```
 
-2. Start the development server:
+2. **Запустите сервер разработки:**
+   ```bash
    npm run dev
+   ```
+   Приложение откроется на `http://localhost:5173` (или указанном Vite адресе).
 
-3. Open the local URL shown by Vite in your browser.
+## Описание компонентов
 
-## Available Scripts
+### Header (Header.jsx)
+Верхний компонент приложения с отображением названия текущего раздела и элементами управления.
 
-- npm run dev — starts the development server
-- npm run build — creates a production build
-- npm run preview — previews the production build locally
-- npm run lint — runs ESLint checks
+### Sidebar (Sidebar.jsx)
+Боковая панель навигации с ссылками на основные разделы:
+- 📋 Tasks (Задачи)
+- 👥 Clients (Клиенты)
+- 📬 Inbox (Входящие)
+- 📞 Contacts (Контакты)
 
-## Project Structure
+### TaskForm (TaskForm.jsx)
+Форма для создания и редактирования задач с полями:
+- Описание задачи
+- Приоритет (High, Medium, Low)
+- Статус (In progress, Closed, Frozen)
+- Назначенный исполнитель
+- Связанный клиент
+- Подзадачи
 
-- src/main.jsx — app entry point and router setup
-- src/App.jsx — main layout with sidebar and outlet
-- src/components/ — reusable UI components such as Header, Sidebar, TaskForm, and TaskList
-- src/pages/ — page views for Clients, Tasks, Inbox, and Contacts
+### TaskList (TaskList.jsx)
+Компонент для отображения задач в Kanban-стиле с колонками по статусам.
 
-## Mobile View
+### TaskModal (TaskModal.jsx)
+Модальное окно для просмотра полных деталей задачи с подзадачами и информацией о назначении.
 
-The layout includes a responsive breakpoint for smaller screens using Bootstrap utilities and the shared CSS variables in src/index.css.
+## Описание страниц
 
-- `--sidebar-width` controls the desktop sidebar width.
-- `--mobile-breakpoint` is used as the responsive threshold for the mobile layout.
+### Tasks (pages/Tasks.jsx)
+Главная страница для управления проектными задачами. Включает:
+- Доска задач с разбиением по статусам
+- Кнопка создания новой задачи
+- Фильтрация и поиск задач
+- Просмотр деталей при клике на задачу
 
-## Notes
+### Clients (pages/Clients.jsx)
+Страница управления клиентами проекта.
 
-The task page uses sample data for demonstration purposes. You can extend the project by connecting the task board to a real backend or persistence layer in the future.
+### Inbox (pages/Inbox.jsx)
+Страница входящей почты и уведомлений.
+
+### Contacts (pages/Contacts.jsx)
+Страница управления контактами и коммуникацией.
+
+Приложение использует примеры данных о задачах для демонстрации функционала:
+
+- **Задача 1:** "Design UI mockup and style guide" (High, In progress)
+  - Автор: Azhar. I
+  - Исполнитель: Jane Smith (Designer)
+  - Клиент: Acme Corporation
+
+- **Задача 2:** "Configure Vite bundler and ESLint rules" (Low, Closed)
+  - Автор: Jane Smith
+  - Исполнитель: John Doe (Developer)
+  - Клиент: Globex Agency
+
+- **Задача 3:** "Implement responsive routing layouts" (Medium, Frozen)
+  - Автор: Azhar. I
+  - Исполнитель: Jane Smith (Designer)
+  - Клиент: Initech Software
+
+## Маршруты приложения
+
+| Маршрут | Компонент | Описание |
+|---------|-----------|---------|
+| `/` | App | Главная страница (макет) |
+| `/task` | Tasks | Управление задачами |
+| `/client` | Clients | Управление клиентами |
+| `/inbox` | Inbox | Входящие сообщения |
+| `/contact` | Contacts | Управление контактами |
+
+## Развитие проекта
+
+Возможности для расширения:
+
+📡 **Интеграция бэкэнда:**
+- Подключение REST API или GraphQL
+- Сохранение данных в базе данных
+- Синхронизация с сервером
+
+🔐 **Аутентификация:**
+- Система логина и регистрации
+- Разграничение прав доступа
+- Хранение учетных данных
+
+## Лицензия
+
+Проект доступен для использования в образовательных целях.
+
